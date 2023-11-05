@@ -40,19 +40,21 @@
     // Loop Types
 
     // While loop
+    $i = 4;
     while($i < 10) {
-      echo $i;
+      echo "<br>" . $i . " in while loop";
       $i++; 
     }
     
     // For loop
     for($i = 0; $i < 10; $i++) {
-      //...
+      echo "<br>" . $i . " in for loop";
     } 
     
     // Foreach 
+    $colors = ['red', 'yellow'];
     foreach($colors as $color) {
-      echo $color; 
+      echo "<br>" . $color; 
     }
     
 
@@ -83,7 +85,7 @@
     }
     
     $car1 = new Car("BMW");
-    echo $car1->getModel();
+    echo "<br>" . $car1->getModel();
 
 
 ?>

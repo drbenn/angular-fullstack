@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -10,6 +11,7 @@ import { TextInputComponent } from './text-input/text-input.component';
 
 // PrimeNG Modules
 import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 
 @NgModule({
@@ -21,7 +23,9 @@ import { InputTextModule } from 'primeng/inputtext';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    InputTextModule
+    InputTextModule,
+    ButtonModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { first, take } from 'rxjs';
+import { ApiService } from 'src/shared/api.service';
 
 @Component({
   selector: 'app-text-input',
@@ -7,5 +9,39 @@ import { Component } from '@angular/core';
 })
 export class TextInputComponent {
 
+  constructor (private api: ApiService) {}
+  
   value!: string | undefined;
+
+  protected submitNewPublicMessage(message: HTMLInputElement): void {
+    console.log('One line to db: ', this.value);
+    console.log(message.value);
+    if (!message.value) {
+      alert('MESSAGE MUST HAVE VALUE');
+      return;
+    } else {
+      this.api.postPublicMessage(message.value).pipe(take(1), first())
+        .subscribe((res:any) => {
+          console.log('SUBMIT TEXT SUCCESS');
+          console.log(res);
+        },
+        (error:any) => {
+          console.log('SUBMIT TEXT ERROR');
+          console.error(error);
+        }
+      )
+    }
+  }
+
+  protected getAllMessages(): void {
+    this.api.getPublicMessages().pipe(take(1), first())
+      .subscribe((res:any) => {
+        console.log('text input subsriber return data');
+        console.log(res);
+      },
+      (error:any) => {
+        console.error(error);
+      }
+      )
+  }
 }
