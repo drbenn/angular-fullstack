@@ -21,27 +21,41 @@ export class TextInputComponent {
       return;
     } else {
       this.api.postPublicMessage(message.value).pipe(take(1), first())
-        .subscribe((res:any) => {
-          console.log('SUBMIT TEXT SUCCESS');
-          console.log(res);
-        },
-        (error:any) => {
-          console.log('SUBMIT TEXT ERROR');
-          console.error(error);
+      .subscribe(
+        {
+          next: (value) => console.log(value),
+          error: (error) => console.error(error),
+          complete: () => console.log('Completed postPublicMessage'),
         }
       )
+      //   .subscribe((res:any) => {
+      //     console.log('SUBMIT TEXT SUCCESS');
+      //     console.log(res);
+      //   },
+      //   (error:any) => {
+      //     console.log('SUBMIT TEXT ERROR');
+      //     console.error(error);
+      //   }
+      // )
     }
   }
 
   protected getAllMessages(): void {
     this.api.getPublicMessages().pipe(take(1), first())
-      .subscribe((res:any) => {
-        console.log('text input subsriber return data');
-        console.log(res);
-      },
-      (error:any) => {
-        console.error(error);
+    .subscribe(
+      {
+        next: (value) => console.log(value),
+        error: (error) => console.error(error),
+        complete: () => console.log('Completed gtAllMessages'),
       }
-      )
+    )
+      // .subscribe((res:any) => {
+      //   console.log('text input subsriber return data');
+      //   console.log(res);
+      // },
+      // (error:any) => {
+      //   console.error(error);
+      // }
+      // )
   }
 }
