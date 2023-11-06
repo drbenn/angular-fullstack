@@ -1,1 +1,19 @@
-<p>register works!</p>
+<p-card header="Register" class="flex flex-column flex-nowrap justify-content-start align-items-start">
+    <form #userRegisterForm="ngForm" (ngSubmit)="attemptUserRegister(userRegisterForm)">
+        <div>
+            <span class="p-float-label">
+            <input pInputText id="username" name="username" [(ngModel)]="username"/>
+            <label htmlFor="username">Username</label>
+            </span>
+        </div>
+        <div class="mt-4">
+            <span class="p-float-label">
+            <input pInputText id="password" name="password" [(ngModel)]="password"/>
+            <label htmlFor="password">Password</label>
+            </span>
+        </div>
+        <div class="mt-4">
+            <p-button label="Register" icon="pi pi-check" type="submit"></p-button>
+        </div>
+    </form>
+</p-card>

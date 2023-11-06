@@ -12,7 +12,9 @@ export class PublicMessagesComponent {
   constructor (private api: ApiService) {}
   
   messageTwoWayValue!: string | undefined;
+  singleMessageTwoWayValue!: string | undefined;
   allPublicMessages: string[] = [];
+  singlePublicMessage: string = '';
 
   protected submitNewPublicMessage(message: HTMLInputElement): void {
     if (!message.value) {
@@ -39,7 +41,7 @@ export class PublicMessagesComponent {
           this.setAllPublicMessages(value);
         },
         error: (error) => console.error(error),
-        complete: () => console.log('Completed gtAllMessages'),
+        complete: () => console.log('Completed getAllMessages'),
       }
     )
   }
@@ -50,5 +52,25 @@ export class PublicMessagesComponent {
       newMessages.push(item.message)
     })
     this.allPublicMessages = newMessages;
+  }
+
+  protected getSinglePublicMessages(number: HTMLInputElement): void {
+    console.log('value', number);
+    if (!number.value) {
+      alert('MESSAGE MUST HAVE VALUE');
+      return;
+    } else {
+      this.api.getSinglePublicMessage(number.value).pipe(take(1), first())
+      .subscribe(
+        {
+          next: (value: any) => {
+            console.log(value);
+            this.singlePublicMessage = value[0]?.message;
+          },
+          error: (error) => console.error(error),
+          complete: () => console.log('Completed getSingleMessage'),
+        }
+      )
+    }
   }
 }

@@ -1,4 +1,4 @@
-<p-card class="shadow-4"  [ngStyle]="{'width': '10rem'}">  
+<p-card header="Public Messages" class="shadow-4"  [ngStyle]="{'width': '10rem'}">  
     <div [ngStyle]="{'max-width': '46rem'}" 
     class="flex flex-row flex-nowrap justify-content-start align-items-start">
         <div>
@@ -6,25 +6,55 @@
             <input pInputText id="message" [(ngModel)]="messageTwoWayValue" #messageInput/>
             <label htmlFor="message">Message</label>
             </span>
-            <small id="message-help">Enter your message</small>
+            <!-- <small id="message-help">Enter your message</small> -->
         </div>
         <div class="ml-3">
             <p-button label="Submit New Public Message" icon="pi pi-check" (click)="submitNewPublicMessage(messageInput)"></p-button>
         </div>
     </div>
-    <div class="mt-3 flex flex-row flex-nowrap justify-content-between align-items-start">
-        <div class="">
+
+
+    <div class="mt-6 flex flex-row flex-nowrap justify-content-between align-items-start">
+        <div [ngStyle]="{'width': '10rem'}">
             <p-button label="Get All Public Messages" icon="pi pi-check" (click)="getAllMessages()"></p-button>
         </div>
-        <p-card *ngIf="allPublicMessages.length > 0"
-            class="ml-3 max-w-30rem text-align-start"
+        <div 
+            *ngIf="allPublicMessages.length > 0"
+            [ngStyle]="{'min-height': '1rem', 'min-width': '15rem'}"
+            class="dcard ml-3 max-w-30rem text-align-start"
             >
             <ul>
                 <li *ngFor="let message of allPublicMessages">{{ message }}</li>
             </ul>
-        </p-card>
+        </div>
+    </div>
 
-        
+    <div class="mt-6 flex flex-column flex-nowrap">
+        <div [ngStyle]="{'max-width': '46rem'}" 
+        class="flex flex-row flex-nowrap justify-content-start align-items-start">
+            <div>
+                <span class="p-float-label">
+                <input pInputText id="message" [(ngModel)]="singleMessageTwoWayValue" #singleMessageIdInput/>
+                <label htmlFor="message">Message Id</label>
+                </span>
+                <!-- <small id="message-help">Enter message id</small> -->
+            </div>
+            <div class="ml-3">
+                <p-button label="Get Message by ID" icon="pi pi-check" (click)="getSinglePublicMessages(singleMessageIdInput)"></p-button>
+            </div>
+        </div>
+        <div class="mt-2"
+        [ngStyle]="{'max-width': '30rem'}"
+        >
+            <div class="dcard w-full text-align-start"
+                *ngIf="singlePublicMessage.length > 0"
+            >
+            <ul>
+                <li>{{ singlePublicMessage }}</li>
+            </ul>
+        </div>
+        </div>
+
     </div>
 
     
