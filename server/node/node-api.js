@@ -59,8 +59,6 @@ app.post('/publicmessage', async (req, res) => {
   const sql = `INSERT INTO public_message (message) VALUES (\ '${bodyMessage}')`;
   con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    console.log(err);
-    console.log(data);
     err ? res.status(400).json(data) : res.status(201).json(data);
   })
 });
@@ -78,10 +76,20 @@ app.post('/registeruser', async (req, res) => {
     } else {
       const isNewUserRegistered = await insertNewUser(username, password);
       console.log('after new user inserted');
-      isNewUserRegistered ? res.status(400) : res.status(409).json({message: 'Error inserting to db'});
+      isNewUserRegistered ? res.status(201) : res.status(409).json({message: 'Error inserting to db'});
     }
   }
-)
+  )
+  
+// Helper function for app.post('/registeruser')
+async function doesUserExist(username) {
+  const sql = `SELECT (username) FROM user WHERE username='${username}'`;
+  const result = await con.promise().query(sql)
+    .then( ([row, fields]) => {
+      return row && row.length > 0;
+    });
+  return result;
+}
 
 // Helper function for app.post('/registeruser')
 async function insertNewUser(username, password) {
@@ -95,15 +103,33 @@ async function insertNewUser(username, password) {
   return result;
 }
 
-// Helper function for app.post('/registeruser')
-async function doesUserExist(username) {
-  const sql = `SELECT (username) FROM user WHERE username='${username}'`;
-  const result = await con.promise().query(sql)
+/**
+ * Verifies if username exists and then registers/inserts new user to database
+ */
+app.post('/loginuser', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const username = req.body.username;
+  const password = req.body.password;
+  const isLoginAuthenticated = await authenticateLogin(username, password);
+  if (!isLoginAuthenticated) {
+      res.status(400).json({message: 'Username/Password incorrect'})
+    } else {
+      res.status(201).json({message: 'Login Successful'});
+    }
+  }
+)
+
+// Helper function for app.post('/loginuser')
+async function authenticateLogin(username, password) {
+  const sql = `SELECT * FROM user WHERE username= ? AND password= ?`;
+  const result = await con.promise().query(sql, [username, password])
     .then( ([row, fields]) => {
-      return row && row.length > 0;
+      return row && row.length === 1;
     });
   return result;
 }
+
+
 
 //       const insert_user_query = `INSERT INTO grizzly_users (username, email, password, join_date) VALUES (\'${submitted_username}\', \'${submitted_email}\', \'${submitted_password}\', \'${date}\')`;
 //       db.query(insert_user_query, (err, data2) => {

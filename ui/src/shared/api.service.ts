@@ -35,4 +35,8 @@ export class ApiService {
 
 
     // ============= USE LOGIN ==================
+
+    public authenticateUser(userBody: {username: string, password: string}): Observable<any> {
+      return this.httpClient.post(this.apiUrl + '/loginuser', userBody) as Observable<any>;
+    }
 }

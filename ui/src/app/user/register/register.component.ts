@@ -25,7 +25,7 @@ export class RegisterComponent {
 
         },
         error: (error: any) => console.error(error),
-        complete: () => console.log('Completed getSingleMessage'),
+        complete: () => console.log('Completed User Register'),
       }
     )
   }
