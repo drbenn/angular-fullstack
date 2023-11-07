@@ -49,6 +49,16 @@
                 "inject": false
               },
               {
+                "input": "src/assets/theme/lara-dark-teal.css",
+                "bundleName": "lara-dark-teal",
+                "inject": false
+              },
+              {
+                "input": "src/assets/theme/mdc-light-deeppurple.css",
+                "bundleName": "mdc-light-deeppurple",
+                "inject": false
+              },
+              {
                 "input": "src/assets/theme/soho-light.css",
                 "bundleName": "soho-light",
                 "inject": false

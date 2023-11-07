@@ -4,16 +4,21 @@
   Hello World!
 </div>
 <app-text-input></app-text-input>
-<div class="flex flew-row flew-wrap justify-content-start align-items-start">
-  <app-public-messages class="ml-4 mt-4"></app-public-messages>
-  <app-login class="ml-4 mt-4"></app-login>
-  <app-register class="ml-4 mt-4"></app-register>
+<div class="m-auto w-10 flex flex-row flex-wrap justify-content-evenly align-items-start
+  border-bluegray-100 border-round border-3 bg-black-alpha-10"
+  [ngStyle]="{'max-width': '90rem', 'min-width': '45rem'}"
+  >
+  <app-public-messages class="mx-2 my-4"></app-public-messages>
+  <app-login class="mx-2 my-4"></app-login>
+  <app-register class="mx-2 my-4"></app-register>
 
-  <div class="dcard ml-4 mt-4">
+  <p-card class="mx-2 my-4">
     <div (click)="changeTheme('prime')">prime viva dark</div>
     <div (click)="changeTheme('soho-dark')">soho dark</div>
     <div (click)="changeTheme('soho-light')">soho light</div>
     <div (click)="changeTheme('mdc-dark-indigo')">mdc-dark-indigo</div>
-  </div>
+    <div (click)="changeTheme('mdc-light-deeppurple')">mdc-light-deeppurple</div>
+    <div (click)="changeTheme('lara-dark-teal')">lara-dark-teal</div>
+  </p-card>
 </div>
 

@@ -14,7 +14,7 @@ const silverDb = {
   database: "project_silver",
 }
 
-const db = mysql.createConnection(silverDb);
+const con = mysql.createConnection(silverDb);
 
 app.get('/', async (req, res) => {
   try {
@@ -27,26 +27,12 @@ app.get('/', async (req, res) => {
   }
 });
 
-// app.get('/booyah/test', async (req, res) => {
-//   try {
-//     res.send(`Hello, World! The current time is: ${new Date()}`);
-//   } catch (error) {
-//     console.error('Error executing query:', error);
-//     res.status(500).send('Error');
-//   }
-// });
-
-// app.post('/booyah/message', async (req, res) => {
-//   const message = req.body;
-//   console.log(message);
-// });
-
 /**
  * Gets all public messages from public_message table
  */
 app.get('/publicmessage', async (req, res) => {
   const sql = 'SELECT * FROM public_message';
-  db.query(sql, (err, data) => {
+  con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     err ? res.status(400).json(data) : res.status(201).json(data);
   })
@@ -58,12 +44,11 @@ app.get('/publicmessage', async (req, res) => {
 app.get('/publicmessage/:id', async (req, res) => {
   const paramId = req.params.id;
   const sql = `SELECT * FROM public_message WHERE id=${paramId}`;
-  db.query(sql, (err, data) => {
+  con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     err ? res.status(400).json(data) : res.status(201).json(data);
   })
 });
-
 
 /**
  * Adds 1 public message to public_message table
@@ -72,66 +57,52 @@ app.post('/publicmessage', async (req, res) => {
   const bodyMessage = req.body.message;
   console.log(req.body);
   const sql = `INSERT INTO public_message (message) VALUES (\ '${bodyMessage}')`;
-  db.query(sql, (err, data) => {
+  con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     console.log(err);
     console.log(data);
     err ? res.status(400).json(data) : res.status(201).json(data);
   })
 });
-
-
-
 
 /**
- * Adds 1 public message to public_message table
+ * Verifies if username exists and then registers/inserts new user to database
  */
 app.post('/registeruser', async (req, res) => {
-  const body = req.body;
-  console.log(req.body);
-  const isUserExisting = await doesUserExist(body.username);
-  console.log('isUserExisting', '1.',isUserExisting);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const username = req.body.username;
+  const password = req.body.password;
+  const isUserExisting = await doesUserExist(username);
   if (isUserExisting) {
-    res.status(409).json({message: 'username already exists, choose another'})
-  } else {
-  const sql = `INSERT INTO user (username, password) VALUES (\ '${body.username}\', \'${body.    password}\')`;
-    db.query(sql, (err, data) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    console.log('in else user register -woijweoi');
-    console.log(err);
-    console.log(data);
-    err ? res.status(400).json(data) : res.status(201).json(data);
-  })
-
+      res.status(409).json({message: 'username already exists, choose another'})
+    } else {
+      const isNewUserRegistered = await insertNewUser(username, password);
+      console.log('after new user inserted');
+      isNewUserRegistered ? res.status(400) : res.status(409).json({message: 'Error inserting to db'});
+    }
   }
+)
 
+// Helper function for app.post('/registeruser')
+async function insertNewUser(username, password) {
+  console.log('in insert New user');
+  const sql = `INSERT INTO user (username, password) VALUES (\ '${username}\', \'${password}\')`;
+  const result = await con.promise().query(sql)
+    .then( ([row, fields]) => {
+      // row will return a header if successful with affectedRows: 1 if successful
+      return row.affectedRows > 0 ? true : false;
+    });
+  return result;
+}
 
-  // const sql = `INSERT INTO public_message (message) VALUES (\ '${bodyMessage}')`;
-  // db.query(sql, (err, data) => {
-  //   res.setHeader('Access-Control-Allow-Origin', '*');
-  //   console.log(err);
-  //   console.log(data);
-  //   err ? res.status(400).json(data) : res.status(201).json(data);
-  // })
-});
-
-
+// Helper function for app.post('/registeruser')
 async function doesUserExist(username) {
   const sql = `SELECT (username) FROM user WHERE username='${username}'`;
-    db.query(sql, (err, data) => {
-    console.log('2');
-    if (data !== null && data && data.length === 1) {
-      console.log('3-true1');
-      return true;
-    }
-    if (err) {
-      console.log('3-true2');
-      return true;
-    } else {
-      console.log('3-false');
-      return false;
-    }
-  })
+  const result = await con.promise().query(sql)
+    .then( ([row, fields]) => {
+      return row && row.length > 0;
+    });
+  return result;
 }
 
 //       const insert_user_query = `INSERT INTO grizzly_users (username, email, password, join_date) VALUES (\'${submitted_username}\', \'${submitted_email}\', \'${submitted_password}\', \'${date}\')`;
