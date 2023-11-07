@@ -8,14 +8,14 @@ GRANT ALL PRIVILEGES ON `project_silver`.* TO 'super'@'localhost';
 FLUSH PRIVILEGES;
 
 
-CREATE TABLE IF NOT EXISTS user (
+CREATE TABLE IF NOT EXISTS users (
      username VARCHAR(255) NOT NULL,
      password VARCHAR(255) NOT NULL,
      date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
-INSERT INTO user (username, password, date) VALUES
+INSERT INTO users (username, password, date) VALUES
      ('user1', 'password1', '2023-11-03'),
      ('user2', 'password2', '2023-11-04'),
      ('user3', 'password3', '2023-11-05'),
@@ -26,13 +26,14 @@ INSERT INTO user (username, password, date) VALUES
 CREATE TABLE IF NOT EXISTS public_message (
      id INT NOT NULL AUTO_INCREMENT,
      message VARCHAR(255) NOT NULL,
+     views INT NOT NULL,
      PRIMARY KEY (id)
 );
 
 INSERT INTO public_message (message) VALUES
-     ('The only way to predict the future is to create it.'),
-     ('Strength does not come from winning. Your struggles develop your strengths. When you go through hardships and decide not to give up, that is when you become strong.'),
-     ('It’s not whether you get knocked down, it’s whether you get back up.'),
-     ('We can’t control what happens to us in life, but we can control how we respond.'),
-     ('The mind is the limit. As long as the mind can conceive it, and you believe it, it can be done.'),
-     ('Failure is not the opposite of success; it is a stepping stone to success.');
+     ('The only way to predict the future is to create it.', 100),
+     ('Strength does not come from winning. Your struggles develop your strengths. When you go through hardships and decide not to give up, that is when you become strong.', 323),
+     ('It’s not whether you get knocked down, it’s whether you get back up.', 836),
+     ('We can’t control what happens to us in life, but we can control how we respond.',69),
+     ('The mind is the limit. As long as the mind can conceive it, and you believe it, it can be done.', 521),
+     ('Failure is not the opposite of success; it is a stepping stone to success.', 420);

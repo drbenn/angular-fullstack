@@ -34,7 +34,7 @@ app.get('/publicmessage', async (req, res) => {
   const sql = 'SELECT * FROM public_message';
   con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    err ? res.status(400).json(data) : res.status(201).json(data);
+    err ? res.status(400).json(err) : res.status(201).json(data);
   })
 });
 
@@ -46,7 +46,7 @@ app.get('/publicmessage/:id', async (req, res) => {
   const sql = `SELECT * FROM public_message WHERE id=${paramId}`;
   con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    err ? res.status(400).json(data) : res.status(201).json(data);
+    err ? res.status(400).json(err) : res.status(201).json(data);
   })
 });
 
@@ -59,9 +59,42 @@ app.post('/publicmessage', async (req, res) => {
   const sql = `INSERT INTO public_message (message) VALUES (\ '${bodyMessage}')`;
   con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    err ? res.status(400).json(data) : res.status(201).json(data);
+    err ? res.status(400).json(err) : res.status(201).json(data);
   })
 });
+
+/**
+ * Updates 1 public message message field in public_message table
+ */
+app.patch('/updatepublicmessage/:id', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const id = req.params.id;
+  const message = req.body.message;
+  console.log(req.body);
+  const sql = 'UPDATE users SET message = ? WHERE id = ?';
+  con.query(sql, [message, id],  (err, data) => {
+    err ? res.status(400).json(err) : res.status(201).json(data);
+  })
+});
+
+/**
+ * Replace 1 public message in public_message table
+ */
+app.put('/replacepublicmessage/:id', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const id = req.params.id;
+  const message = req.body.message;
+  console.log(req.body);
+  const newViews = Math.floor(Math.random() * 1000);
+  const sql = 'REPLACE INTO users (id, message, views) VALUES (?, ?, ?)';
+
+  con.query(sql, [id, message, newViews],  (err, data) => {
+    err ? res.status(400).json(err) : res.status(201).json(data);
+  })
+});
+
+
+
 
 /**
  * Verifies if username exists and then registers/inserts new user to database
@@ -83,7 +116,7 @@ app.post('/registeruser', async (req, res) => {
   
 // Helper function for app.post('/registeruser')
 async function doesUserExist(username) {
-  const sql = `SELECT (username) FROM user WHERE username='${username}'`;
+  const sql = `SELECT (username) FROM users WHERE username='${username}'`;
   const result = await con.promise().query(sql)
     .then( ([row, fields]) => {
       return row && row.length > 0;
@@ -94,7 +127,7 @@ async function doesUserExist(username) {
 // Helper function for app.post('/registeruser')
 async function insertNewUser(username, password) {
   console.log('in insert New user');
-  const sql = `INSERT INTO user (username, password) VALUES (\ '${username}\', \'${password}\')`;
+  const sql = `INSERT INTO users (username, password) VALUES (\ '${username}\', \'${password}\')`;
   const result = await con.promise().query(sql)
     .then( ([row, fields]) => {
       // row will return a header if successful with affectedRows: 1 if successful
@@ -111,8 +144,9 @@ app.post('/loginuser', async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const isLoginAuthenticated = await authenticateLogin(username, password);
+  // todo: if autheticated and additional data for user required, set db query function here
   if (!isLoginAuthenticated) {
-      res.status(400).json({message: 'Username/Password incorrect'})
+      res.status(400).json({message: 'Username/Password incorrect'});
     } else {
       res.status(201).json({message: 'Login Successful'});
     }
@@ -121,7 +155,7 @@ app.post('/loginuser', async (req, res) => {
 
 // Helper function for app.post('/loginuser')
 async function authenticateLogin(username, password) {
-  const sql = `SELECT * FROM user WHERE username= ? AND password= ?`;
+  const sql = `SELECT * FROM users WHERE username= ? AND password= ?`;
   const result = await con.promise().query(sql, [username, password])
     .then( ([row, fields]) => {
       return row && row.length === 1;
@@ -129,7 +163,7 @@ async function authenticateLogin(username, password) {
   return result;
 }
 
-
+// PUT is used to replace an entire record, while PATCH is used to partially replace/update 1+ fields in record
 
 //       const insert_user_query = `INSERT INTO grizzly_users (username, email, password, join_date) VALUES (\'${submitted_username}\', \'${submitted_email}\', \'${submitted_password}\', \'${date}\')`;
 //       db.query(insert_user_query, (err, data2) => {

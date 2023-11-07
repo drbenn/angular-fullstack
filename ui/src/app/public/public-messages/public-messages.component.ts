@@ -13,6 +13,13 @@ export class PublicMessagesComponent {
   
   messageTwoWayValue!: string | undefined;
   singleMessageTwoWayValue!: string | undefined;
+
+  updateIdTwoWayValue!: string | undefined;
+  updateMessageTwoWayValue!: string | undefined;
+
+  replaceIdTwoWayValue!: string | undefined;
+  replaceMessageTwoWayValue!: string | undefined;
+
   allPublicMessages: string[] = [];
   singlePublicMessage: string = '';
 
@@ -69,6 +76,44 @@ export class PublicMessagesComponent {
           },
           error: (error) => console.error(error),
           complete: () => console.log('Completed getSingleMessage'),
+        }
+      )
+    }
+  }
+
+  protected updatePublicMessage(message: HTMLInputElement, number: HTMLInputElement): void {
+    console.log('value', number);
+    if (!message.value || !number.value) {
+      alert('MESSAGE MUST HAVE VALUES');
+      return;
+    } else {
+      this.api.updatePublicMessage(message.value, Number(number.value)).pipe(take(1), first())
+      .subscribe(
+        {
+          next: (value: any) => {
+            console.log(value);
+          },
+          error: (error) => console.error(error),
+          complete: () => console.log('Completed Update Message'),
+        }
+      )
+    }
+  }
+
+  protected replacePublicMessage(message: HTMLInputElement, number: HTMLInputElement): void {
+    console.log('value', number);
+    if (!message.value || !number.value) {
+      alert('MESSAGE MUST HAVE VALUES');
+      return;
+    } else {
+      this.api.replacePublicMessage(message.value, Number(number.value)).pipe(take(1), first())
+      .subscribe(
+        {
+          next: (value: any) => {
+            console.log(value);
+          },
+          error: (error) => console.error(error),
+          complete: () => console.log('Completed replace public message'),
         }
       )
     }
