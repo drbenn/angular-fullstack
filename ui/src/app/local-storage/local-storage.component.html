@@ -1,0 +1,113 @@
+<p-card header="Local Storage" class="flex flex-column flex-nowrap justify-content-start align-items-start">
+    <h3>Use Cases</h3>
+    <h5>
+        In general, local storage is a good choice for storing data that is small, persistent, and does not need to be synchronized with a server.
+    </h5>
+    <ul>
+        <li>User preferences - styles, fonts, themes</li>
+        <li>Login information - username, password</li>
+        <li>Caching data - images or data previously viewed/used, search results, search keywords!</li>
+        <li>Offline access</li>
+        <li>Game data - player progress, high scores</li>
+    </ul>
+
+    <h3>Login Local Storage Cycle</h3>
+    <ol>
+        <li>
+            When the user logs in successfully, store the user's authentication token in local storage.  
+        </li>
+        <li>
+            On each page load, check if there is an authentication token in local storage. If there is, the user is logged in. If there is no authentication token, the user is not logged in and should be redirected to the login page.
+        </li>
+        <li>
+            When the user logs out, remove the authentication token from local storage.
+        </li>
+    </ol>
+    <div [ngStyle]="{'max-width': '46rem'}" 
+    class="mt-3 flex flex-row flex-nowrap justify-content-start align-items-start">
+        <div class="">
+            <span class="p-float-label">
+            <input  class="w-4rem" pInputText id="id" [(ngModel)]="newKeyVal" #newKey/>
+            <label htmlFor="ky">Key</label>
+            </span>
+        </div>
+        <div class="ml-1">
+            <span class="p-float-label">
+            <input  class="w-11rem" pInputText id="value" [(ngModel)]="newValVal" #newVal/>
+            <label htmlFor="value">Value</label>
+            </span>
+        </div>
+        <div class="ml-3">
+            <p-button label="Add to Local Storage" icon="pi pi-check" (click)="addLocalStorageItem(newKey, newVal)"></p-button>
+        </div>
+    </div>
+
+    <div [ngStyle]="{'max-width': '46rem'}" 
+    class="mt-3 flex flex-row flex-nowrap justify-content-start align-items-start">
+        <div class="">
+            <span class="p-float-label">
+            <input  class="w-4rem" pInputText id="id" [(ngModel)]="removeKeyVal" #removeKey/>
+            <label htmlFor="id">Id</label>
+            </span>
+        </div>
+        <div class="ml-3">
+            <p-button label="Remove by Key" icon="pi pi-check" (click)="removeByKey(removeKey)"></p-button>
+        </div>
+    </div>
+
+    <div [ngStyle]="{'max-width': '46rem'}" 
+    class="mt-3 flex flex-row flex-nowrap justify-content-start align-items-start">
+        <div class="">
+            <span class="p-float-label">
+            <input  class="w-4rem" pInputText id="id" [(ngModel)]="getKeyVal" #getKey/>
+            <label htmlFor="id">Id</label>
+            </span>
+        </div>
+        <div class="ml-3">
+            <p-button label="Get Single Item Value by Key" icon="pi pi-check" (click)="getOneLocalStorageItem(getKey)"></p-button>
+        </div>
+    </div>
+
+    <div 
+        *ngIf="singleStorageItem"
+        [ngStyle]="{'min-height': '1rem', 'min-width': '15rem'}"
+        class="dcard ml-3 max-w-30rem text-align-start"
+        >
+        <ul>
+            <li>{{ singleStorageItem | json }}</li>
+        </ul>
+    </div>
+
+
+
+
+    <div class="mt-6 flex flex-row flex-nowrap justify-content-between align-items-start">
+        <div [ngStyle]="{'width': '10rem'}">
+            <p-button label="Get All Local Storage Keys" icon="pi pi-check" (click)="getAllLocalStorageKeys()"></p-button>
+        </div>
+        <div 
+            *ngIf="allKeys"
+            [ngStyle]="{'min-height': '1rem', 'min-width': '15rem'}"
+            class="dcard ml-3 max-w-30rem text-align-start"
+            >
+            <ul>
+                <li *ngFor="let key of allKeys">{{ key }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-6 flex flex-row flex-nowrap justify-content-between align-items-start">
+        <div [ngStyle]="{'width': '10rem'}">
+            <p-button label="Get All Local Storage" icon="pi pi-check" (click)="getAllLocalStorage()"></p-button>
+        </div>
+        <div 
+            *ngIf="allStorage"
+            [ngStyle]="{'min-height': '1rem', 'min-width': '15rem'}"
+            class="dcard ml-3 max-w-30rem text-align-start"
+            >
+            <ul>
+                <li>{{ allStorage | json }}</li>
+            </ul>
+        </div>
+    </div>
+</p-card>

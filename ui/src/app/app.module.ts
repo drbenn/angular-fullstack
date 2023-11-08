@@ -6,7 +6,6 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TextInputComponent } from './text-input/text-input.component';
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { PublicMessagesComponent } from './public/public-messages/public-messages.component';
@@ -16,15 +15,16 @@ import { PublicMessagesComponent } from './public/public-messages/public-message
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { LocalStorageComponent } from './local-storage/local-storage.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    TextInputComponent,
     LoginComponent,
     RegisterComponent,
-    PublicMessagesComponent
+    PublicMessagesComponent,
+    LocalStorageComponent
   ],
   imports: [
     BrowserModule,

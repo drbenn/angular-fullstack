@@ -11,6 +11,9 @@ export class PublicMessagesComponent {
 
   constructor (private api: ApiService) {}
   
+  allPublicMessages: string[] = [];
+  singlePublicMessage: string = '';
+
   messageTwoWayValue!: string | undefined;
   singleMessageTwoWayValue!: string | undefined;
 
@@ -20,8 +23,7 @@ export class PublicMessagesComponent {
   replaceIdTwoWayValue!: string | undefined;
   replaceMessageTwoWayValue!: string | undefined;
 
-  allPublicMessages: string[] = [];
-  singlePublicMessage: string = '';
+  deleteIdTwoWayValue!: string | undefined;
 
   protected submitNewPublicMessage(message: HTMLInputElement): void {
     if (!message.value) {
@@ -82,7 +84,6 @@ export class PublicMessagesComponent {
   }
 
   protected updatePublicMessage(message: HTMLInputElement, number: HTMLInputElement): void {
-    console.log('value', number);
     if (!message.value || !number.value) {
       alert('MESSAGE MUST HAVE VALUES');
       return;
@@ -101,7 +102,6 @@ export class PublicMessagesComponent {
   }
 
   protected replacePublicMessage(message: HTMLInputElement, number: HTMLInputElement): void {
-    console.log('value', number);
     if (!message.value || !number.value) {
       alert('MESSAGE MUST HAVE VALUES');
       return;
@@ -114,6 +114,24 @@ export class PublicMessagesComponent {
           },
           error: (error) => console.error(error),
           complete: () => console.log('Completed replace public message'),
+        }
+      )
+    }
+  }
+
+  protected deletePublicMessage(id: HTMLInputElement) {
+    if (!id.value) {
+      alert('DELETE ID MUST HAVE VALUES');
+      return;
+    } else {
+      this.api.deletePublicMessage(Number(id.value)).pipe(take(1), first())
+      .subscribe(
+        {
+          next: (value: any) => {
+            console.log(value);
+          },
+          error: (error) => console.error(error),
+          complete: () => console.log('Completed delete public message'),
         }
       )
     }

@@ -3,11 +3,27 @@
 <div class="bg-yellow-500">
   Hello World!
 </div>
-<app-text-input></app-text-input>
+
+
+
 <div class="m-auto w-10 flex flex-row flex-wrap justify-content-evenly align-items-start
-  border-bluegray-100 border-round border-3 bg-black-alpha-10"
+  border-bluegray-100 border-round border-3 bg-black-alpha-10 line-height-3"
   [ngStyle]="{'max-width': '90rem', 'min-width': '45rem'}"
   >
+
+  <p-card header="Todo:" class="card flex flex-column justify-content-start align-items-start">
+    <ol>
+      <li>Jest</li>
+      <li>JSON Web token</li>
+      <li>store in browser local storage</li>
+      <li>return headers from server</li>
+      <li>Websocket chat</li>
+      <li>create vanilla js ui</li>
+
+    </ol>
+  </p-card>
+
+  <app-local-storage [ngStyle]="{'max-width': '25rem'}"></app-local-storage>
   <app-public-messages class="mx-2 my-4"></app-public-messages>
   <app-login class="mx-2 my-4"></app-login>
   <app-register class="mx-2 my-4"></app-register>

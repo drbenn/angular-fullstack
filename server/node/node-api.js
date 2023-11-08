@@ -30,7 +30,7 @@ app.get('/', async (req, res) => {
 /**
  * Gets all public messages from public_message table
  */
-app.get('/publicmessage', async (req, res) => {
+app.get('/public_message', async (req, res) => {
   const sql = 'SELECT * FROM public_message';
   con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -41,7 +41,7 @@ app.get('/publicmessage', async (req, res) => {
 /**
  * Gets one public messages by id from public_message table
  */
-app.get('/publicmessage/:id', async (req, res) => {
+app.get('/public_message/:id', async (req, res) => {
   const paramId = req.params.id;
   const sql = `SELECT * FROM public_message WHERE id=${paramId}`;
   con.query(sql, (err, data) => {
@@ -53,10 +53,10 @@ app.get('/publicmessage/:id', async (req, res) => {
 /**
  * Adds 1 public message to public_message table
  */
-app.post('/publicmessage', async (req, res) => {
+app.post('/public_message', async (req, res) => {
   const bodyMessage = req.body.message;
-  console.log(req.body);
-  const sql = `INSERT INTO public_message (message) VALUES (\ '${bodyMessage}')`;
+  const newViews = Math.floor(Math.random() * 500);
+  const sql = `INSERT INTO public_message (message, views) VALUES (\'${bodyMessage}\', \'${newViews}\')`;
   con.query(sql, (err, data) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     err ? res.status(400).json(err) : res.status(201).json(data);
@@ -66,12 +66,11 @@ app.post('/publicmessage', async (req, res) => {
 /**
  * Updates 1 public message message field in public_message table
  */
-app.patch('/updatepublicmessage/:id', async (req, res) => {
+app.patch('/public_message/:id', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
   const message = req.body.message;
-  console.log(req.body);
-  const sql = 'UPDATE users SET message = ? WHERE id = ?';
+  const sql = 'UPDATE public_message SET message = ? WHERE id = ?';
   con.query(sql, [message, id],  (err, data) => {
     err ? res.status(400).json(err) : res.status(201).json(data);
   })
@@ -80,26 +79,36 @@ app.patch('/updatepublicmessage/:id', async (req, res) => {
 /**
  * Replace 1 public message in public_message table
  */
-app.put('/replacepublicmessage/:id', async (req, res) => {
+app.put('/public_message/:id', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
   const message = req.body.message;
   console.log(req.body);
   const newViews = Math.floor(Math.random() * 1000);
-  const sql = 'REPLACE INTO users (id, message, views) VALUES (?, ?, ?)';
+  const sql = 'REPLACE INTO public_message (id, message, views) VALUES (?, ?, ?)';
 
   con.query(sql, [id, message, newViews],  (err, data) => {
     err ? res.status(400).json(err) : res.status(201).json(data);
   })
 });
 
-
+/**
+ * Delete 1 public message in public_message table
+ */
+app.delete('/public_message/:id', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  const id = req.params.id;
+  const sql = 'DELETE FROM public_message WHERE id = ?';
+  con.query(sql, [id],  (err, data) => {
+    err ? res.status(400).json(err) : res.status(201).json(data);
+  })
+});
 
 
 /**
  * Verifies if username exists and then registers/inserts new user to database
  */
-app.post('/registeruser', async (req, res) => {
+app.post('/register_user', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const username = req.body.username;
   const password = req.body.password;
@@ -112,7 +121,7 @@ app.post('/registeruser', async (req, res) => {
       isNewUserRegistered ? res.status(201) : res.status(409).json({message: 'Error inserting to db'});
     }
   }
-  )
+)
   
 // Helper function for app.post('/registeruser')
 async function doesUserExist(username) {

@@ -17,18 +17,18 @@
     class=" mt-3 flex flex-row flex-nowrap justify-content-start align-items-start">
         <div class="">
             <span class="p-float-label">
-            <input class="w-4rem" pInputText id="id" [(ngModel)]="updateIdTwoWayValue" #idInput/>
+            <input class="w-4rem" pInputText id="id" [(ngModel)]="updateIdTwoWayValue" #updateIdInput/>
             <label htmlFor="id">Id</label>
             </span>
         </div>
         <div class="ml-1">
             <span class="p-float-label">
-            <input class="w-11rem" pInputText id="message" [(ngModel)]="updateMessageTwoWayValue" #messageInput/>
+            <input class="w-11rem" pInputText id="message" [(ngModel)]="updateMessageTwoWayValue" #updateMessageInput/>
             <label htmlFor="message">Message</label>
             </span>
         </div>
         <div class="ml-3">
-            <p-button label="Update Public Message" icon="pi pi-check" (click)="updatePublicMessage(messageInput, idInput)"></p-button>
+            <p-button label="Update Public Message" icon="pi pi-check" (click)="updatePublicMessage(updateMessageInput, updateIdInput)"></p-button>
         </div>
     </div>
 
@@ -36,18 +36,31 @@
     class="mt-3 flex flex-row flex-nowrap justify-content-start align-items-start">
         <div class="">
             <span class="p-float-label">
-            <input  class="w-4rem" pInputText id="id" [(ngModel)]="replaceIdTwoWayValue" #idInput/>
+            <input  class="w-4rem" pInputText id="id" [(ngModel)]="replaceIdTwoWayValue" #replaceIdInput/>
             <label htmlFor="id">Id</label>
             </span>
         </div>
         <div class="ml-1">
             <span class="p-float-label">
-            <input  class="w-11rem" pInputText id="message" [(ngModel)]="replaceMessageTwoWayValue" #messageInput/>
+            <input  class="w-11rem" pInputText id="message" [(ngModel)]="replaceMessageTwoWayValue" #replaceMessageInput/>
             <label htmlFor="message">Message</label>
             </span>
         </div>
         <div class="ml-3">
-            <p-button label="Replace Public Message" icon="pi pi-check" (click)="replacePublicMessage(messageInput, idInput)"></p-button>
+            <p-button label="Replace Public Message" icon="pi pi-check" (click)="replacePublicMessage(replaceMessageInput, replaceIdInput)"></p-button>
+        </div>
+    </div>
+
+    <div [ngStyle]="{'max-width': '46rem'}" 
+    class="mt-3 flex flex-row flex-nowrap justify-content-start align-items-start">
+        <div class="">
+            <span class="p-float-label">
+            <input  class="w-4rem" pInputText id="id" [(ngModel)]="deleteIdTwoWayValue" #deleteIdInput/>
+            <label htmlFor="id">Id</label>
+            </span>
+        </div>
+        <div class="ml-3">
+            <p-button label="Delete Public Message" icon="pi pi-check" (click)="deletePublicMessage(deleteIdInput)"></p-button>
         </div>
     </div>
 
