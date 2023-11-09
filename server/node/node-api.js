@@ -2,10 +2,13 @@ const express = require("express");
 const mysql = require('mysql2');
 const cors = require('cors');
 
+// Express setup
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+
+// Database config
 const silverDb = {
   host: "localhost",
   port: 3306,
@@ -14,7 +17,9 @@ const silverDb = {
   database: "project_silver",
 }
 
+// Connections
 const con = mysql.createConnection(silverDb);
+
 
 app.get('/', async (req, res) => {
   try {
@@ -83,7 +88,6 @@ app.put('/public_message/:id', async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   const id = req.params.id;
   const message = req.body.message;
-  console.log(req.body);
   const newViews = Math.floor(Math.random() * 1000);
   const sql = 'REPLACE INTO public_message (id, message, views) VALUES (?, ?, ?)';
 

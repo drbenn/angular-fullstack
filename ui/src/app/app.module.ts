@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { LocalStorageComponent } from './local-storage/local-storage.component';
+import { WebSocketChatComponent } from './web-socket-chat/web-socket-chat.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { LocalStorageComponent } from './local-storage/local-storage.component';
     LoginComponent,
     RegisterComponent,
     PublicMessagesComponent,
-    LocalStorageComponent
+    LocalStorageComponent,
+    WebSocketChatComponent
   ],
   imports: [
     BrowserModule,
