@@ -7,12 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./web-socket-chat.component.scss']
 })
 export class WebSocketChatComponent implements OnInit {
-  private port: number = 443;
+  private port: number = 4200;
   protected messages: string[] = [];
   constructor(private httpClient: HttpClient) {}
 
   nameValue!: string | undefined;
   messageValue!: string | undefined;
+  protected wsStatus: string = 'closed';
 
   ngOnInit(): void {
     this.connectToSocket();
@@ -37,12 +38,69 @@ export class WebSocketChatComponent implements OnInit {
   }
 
   sendMessage(name: HTMLInputElement, message: HTMLInputElement) {
-    const messageData: string = JSON.stringify({name: name.value, message: message.value });
-    console.log(messageData);
+    this.wsSend(name.value + ':' + message.value)
     
-    this.httpClient.post(`ws://localhost:${this.port}`, messageData).subscribe();
+    // const messageData: string = JSON.stringify({name: name.value, message: message.value });
+    // console.log(messageData);
+    
+    // this.httpClient.post(`ws://localhost:${this.port}`, messageData).subscribe();
     // const messageData = JSON.stringify({ message });
     // this.httpClient.post(`ws://localhost:${this.port}/chat`, messageData).subscribe();
+  }
+
+  ws!: WebSocket | any | undefined; // any included to prevent breaking error of type potentially being 'never'
+  openWs() {
+    this.wsStatus = 'open';
+
+    this.closeConnection();
+
+    this.ws = new WebSocket('ws://localhost:3000');
+
+    this.ws.onerror = ( event: Event) => {
+      console.log('ERROR', event);
+      alert(event);
+    }
+
+    this.ws.open = ( event: Event) => {
+      console.log('OPEN', event);
+      alert(event);
+    }
+
+  }
+
+  closeWs() {
+    this.wsStatus = 'closed';
+    this.closeConnection();
+  }
+
+  message(msg: any | MessageEvent<string>) {
+    console.log('received message', msg.data);
+    
+  }
+
+  wsSend(val: string) {
+
+
+    if (!val) {
+      return;
+    } else if (!this.ws) {
+      console.log('No websocket connection');
+      return;
+    }
+
+    this.ws.send(val);
+    console.log('SENT', val);
+    
+
+  }
+  
+  closeConnection() {
+    if (!!this.ws) {
+      this.ws.close = ( event: Event) => {
+        console.log('CLOSED', event);
+        alert(event);
+      }
+    }
   }
 
 }

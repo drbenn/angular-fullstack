@@ -1,28 +1,114 @@
-const express = require('express')
-const webserver = express()
- .use((req, res) => {
-    // res.header('Access-Control-Allow-Origin', 'http://localhost:4200'); // Add CORS header
-    res.setHeader('Access-Control-Allow-Origin', '*');
-   res.sendFile('/websocket-client.html', { root: __dirname })
- }
-)
- .listen(3000, () => console.log(`Listening on ${3000}`))
-const { WebSocketServer } = require('ws')
-const sockserver = new WebSocketServer({ port: 443 })
-sockserver.on('connection', ws => {
- console.log('New client connected!')
- ws.send('connection established')
- ws.on('close', () => console.log('Client has disconnected!'))
- ws.on('message', data => {
-   sockserver.clients.forEach(client => {
-     console.log(`distributing message: ${data}`)
-     client.send(`${data}`)
+// const express = require("express");
+// const { WebSocketServer, WebSocket } = require('ws')
+import express from 'express';
+import { WebSocketServer, WebSocket } from 'ws';
+
+
+const app = express();
+
+
+const port = process.env.port || 3000;
+
+function onSocketPreError(e) {
+    console.log(e);
+}
+
+function onSocketPostError(e) {
+    console.log(e);
+}
+
+const server = app.listen(port, () => {
+    console.log(`app listening on port ${port}`)
+});
+
+// each wss needs to be tied to a normal server
+// setting no server allows entry to have steps for authorization, elsewise the plugin doesnt not give you the chance to insert aditional logic
+const wss = new WebSocketServer({ noServer: true})
+
+server.on('upgrade', (req, socket, head) => {
+    socket.on('error', onSocketPreError);
+
+    // perform auth here
+    // 7:55 onwards for execellent intracacies
+    // https://www.youtube.com/watch?v=Gq7fenbjehs
+    if (!req.headers['BadAuth']) {
+        socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n');
+        socket.destroy();
+        return;
+    }
+
+    wss.handleUpgrade(req, socket, head,(ws) => {
+       socket.removeListener('error', onSocketPreError);
+       wss.emit('connection', ws, req); 
+    })
+});
+
+wss.on('connection', (ws, req) => {
+   ws.on('error', onSocketPostError);
+
+   ws.on('message', (msg, isBinary) => {
+    // this wss.clients includes the client that is actually sending the message
+    wss.clients.forEach((client) => {
+        // this would send to everyone EXCEPT the person/client sending the message
+        // if (ws !== client && client.readyState === WebSocket.OPEN) {
+
+        // this would send to everyone INCLUDING the person/client sending the message
+        if (client.readyState === WebSocket.OPEN) {
+            client.send(msg, { binary: isBinary });
+        }
+    });
+   });
+
+   ws.on('close', () => {
+    console.log('Connection closed');
+    // go to covalence youtube above...16:05 stale connections explanation
    })
- })
- ws.onerror = function () {
-   console.log('websocket error')
- }
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const express = require('express')
+// const webserver = express()
+//  .use((req, res) => {
+//     // res.header('Access-Control-Allow-Origin', 'http://localhost:4200'); // Add CORS header
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//    res.sendFile('/websocket-client.html', { root: __dirname })
+//  }
+// )
+//  .listen(3000, () => console.log(`Listening on ${4200}`))
+// const { WebSocketServer } = require('ws')
+
+// const sockserver = new WebSocketServer({ port: 443 })
+
+// sockserver.on('connection', ws => {
+//  console.log('New client connected!')
+//  ws.send('connection established')
+//  ws.on('close', () => console.log('Client has disconnected!'))
+//  ws.on('message', data => {
+//    sockserver.clients.forEach(client => {
+//      console.log(`distributing message: ${data}`)
+//      client.send(`${data}`)
+//    })
+//  })
+//  ws.onerror = function () {
+//    console.log('websocket error')
+//  }
+// })
+
+// sockserver.setHeader('Access-Control-Allow-Origin', '*');
+// sockserver.setHeader()
 
 
 
