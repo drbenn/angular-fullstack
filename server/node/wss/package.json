@@ -1,0 +1,17 @@
+{
+  "name": "wss",
+  "version": "1.0.0",
+  "description": "",
+  "main": "node-wss.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon node-wss.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1",
+    "ws": "^8.14.2"
+  }
+}

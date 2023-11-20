@@ -48,7 +48,7 @@ export class ApiService {
     // ============= REGISTER USER ==================
 
     public registerUser(userBody: {username: string, password: string}): Observable<any> {
-      return this.httpClient.post(this.apiUrl + '/register_user', userBody) as Observable<any>;
+      return this.httpClient.post(this.apiUrl + '/sha_register_user', userBody) as Observable<any>;
     }
 
 

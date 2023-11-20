@@ -1,5 +1,24 @@
+npx @angular/cli@next new AngularLatestProject
+npx @angular/cli@16 new Angular16Project
+
 # JEST in Angular 16
 https://dougmbarcellos.medium.com/angular-16-jest-quick-guide-c720774241c7
+
+npm install --save-dev jest @types/jest jest-environment-jsdom
+
+angular.json > test > builder: "@angular-devkit/build-angular:jest"  & remove karma section
+
+tsconfig.spec.ts > compilerOptions> types: ["jest"]
+
+in angular root create file jestconfig.js and input
+
+module.exports = {
+  preset: 'jest-preset-angular',
+  setupFilesAfterEnv: ['<rootDir>/setup-jest.js'],
+  moduleNameMapper: {
+    '^@app/(.*)$': '<rootDir>/src/app/$1'
+  }
+};
 
 # Docker commands
 https://www.youtube.com/watch?v=gAkwW2tuIqE
